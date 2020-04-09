@@ -46,7 +46,7 @@ function result = segment_meta(data, ratio, conn, minVolume, calls)
             depths = tmp(2:end)'; % drop the zero
             
             if numel(depths) >= 2
-                %% perform bring-up modification & segmentation
+                %% perform bring-up transformation & segmentation
                 
                 % get index i of greatest difference depth_i - depth_i+1
                 [~, index] = max([depths(2:end), NaN] - depths);

@@ -12,7 +12,7 @@ clear;
 
 %% load &/ make dataset
 
-load("private\data\small.mat");
+load("private\data\partition.mat");
 
 
 %% modify dataset (morphological operations etc.)
@@ -28,10 +28,10 @@ result = segment(fill, 0.125, 26, 27000);
 %% show &/ save results
 
 cc = bwconncomp(result, 6);
-lm = labelmatrix(cc) .* uint8(data);
+lm = labelmatrix(cc) .* uint16(data);
 
-rgb = label2rgb(lm(:,:,150),'jet','w','shuffle');
+rgb = label2rgb(lm(:,:,15),'jet','w','shuffle');
 
 imshow(rgb);
 
-save("private\results\small", "result");
+save("private\results\partition", "result");
