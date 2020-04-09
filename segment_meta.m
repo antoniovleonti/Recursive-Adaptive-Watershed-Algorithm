@@ -18,10 +18,12 @@ function result = segment_meta(data, ratio, conn, minVolume, calls)
     label = labelmatrix(cc);
 
     %% for each of the regions...
+    
+    numRegions = max(label, [], "all");
 
-    for i = 1 : max(label, [], "all")
+    for i = 1 : numRegions
         
-        fprintf("%*c %d / %d \n", 2*calls, '|', i, max(label, [], "all"));
+        fprintf("%*c %d / %d \n", 2*calls, '|', i, numRegions);
 
         if stats.Volume(i) >= minVolume
             %% obtain the region of interest and create IEDM
