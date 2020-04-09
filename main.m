@@ -12,7 +12,7 @@ clear;
 
 %% load &/ make dataset
 
-load("data\small.mat");
+load("private\data\small.mat");
 
 
 %% modify dataset (morphological operations etc.)
@@ -34,4 +34,4 @@ rgb = label2rgb(lm(:,:,150),'jet','w','shuffle');
 
 imshow(rgb);
 
-save("results\small", "result");
+save("private\results\small", "result");
