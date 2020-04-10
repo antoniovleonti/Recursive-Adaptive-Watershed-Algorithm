@@ -13,5 +13,5 @@ function filled = fill3d(data)
     data = fill_xy(data);
     
     %now permute back to original orientation
-    filled = permute(data, [1,3,2]);
+    filled = imfill(permute(data, [1,3,2]), 'holes');
 end
