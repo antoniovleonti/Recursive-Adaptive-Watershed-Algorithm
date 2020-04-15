@@ -7,7 +7,7 @@ FONSECA (http://dx.doi.org/10.1680/jgeot.16.P.278). This code is easier to
 read and faster than the original code. It's also recursive, which is cool.
 %}
 
-function result = segment_meta(data, ratio, minVolume, calls)
+function result = segmentMeta(data, ratio, minVolume, calls)
     %% identify disjoint regions in data
 
     % get connected components
@@ -63,7 +63,7 @@ function result = segment_meta(data, ratio, minVolume, calls)
                 % determine if region was cut
                 if any(crop & (segmented == 0), 'all')
                     % resegment if it was
-                    segmented = segment_meta(segmented, ratio, minVolume, calls+1);
+                    segmented = segmentMeta(segmented, ratio, minVolume, calls+1);
                 end
                 
                 x = bb(2):sum(bb([2,5]));
