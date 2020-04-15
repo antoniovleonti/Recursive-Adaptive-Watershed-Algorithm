@@ -27,9 +27,7 @@ fprintf("Segmentating ''%s''...\n", dset);
 
 result = segment(fill, 0.1, 10000);
 
-cc = bwconncomp(result, 6);
-lm = labelmatrix(cc);
-lm = lm .* cast(data, "like", lm);
+lm = labelmatrix(bwconncomp(result, 6));
 
 save(sprintf("private\\results\\%s", dset), "lm");
 
@@ -39,4 +37,4 @@ path = sprintf("private\\extracted\\%s\\%s\\",dset,replace(datestr(datetime),':'
 
 fprintf("Extracting regions in ''%s'' to ''%s.''\n", dset, path);
 
-extractRegions(data, [], path, 27.7128); %sqrt(3 * (16^2)) = 27.7128
+extractRegions(data, lm, path, 27.7128); %sqrt(3 * (16^2)) = 27.7128

@@ -66,8 +66,12 @@ function result = segment_meta(data, ratio, minVolume, calls)
                     segmented = segment_meta(segmented, ratio, minVolume, calls+1);
                 end
                 
+                x = bb(2):sum(bb([2,5]));
+                y = bb(1):sum(bb([1,4]));
+                z = bb(3):sum(bb([3,6]));
+                
                 % transfer cuts to data
-                data(bb(2):sum(bb([2,5])),bb(1):sum(bb([1,4])),bb(1):sum(bb([3,6]))) = imcrop3(data, bb) & ~(crop & (segmented == 0));
+                data(x,y,z) = imcrop3(data, bb) & ~(crop & (segmented == 0));
             end
         end
     end
