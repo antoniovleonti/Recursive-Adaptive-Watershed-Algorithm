@@ -6,7 +6,7 @@ function is simply to make it so the user doesn't need to specify the state
 parameter "calls," which is used for formatting console output.
 %}
 
-function result = segment(data, ratio, conn, minVolume)
+function result = segment(data, ratio, minVolume)
 
-    result = segment_meta(data, ratio, conn, minVolume, 0);
+    result = segment_meta(data, ratio, minVolume, 0);
 end

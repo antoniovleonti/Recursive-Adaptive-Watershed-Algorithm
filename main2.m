@@ -1,35 +1,39 @@
 %{
 Antonio Leonti
 4.1.2020
-Attempting to rewrite the code from the paper "Quantification of the
-morphology of shelly carbonate sands using 3D images" by D. KONG and J.
-FONSECA. This code is easier to read and better at its intended purpose.
-
-Algorithm /concept is from: http://dx.doi.org/10.1680/jgeot.16.P.278
+main adapted specifically for batch scan
 %}
 
 clear;
 
 %% load &/ make dataset
 
-dset = "small";
+dset = "batch";
 
 load(sprintf("private\\data\\%s.mat", dset));
 
 
 %% modify dataset (morphological operations etc.)
 
-fill = fill3d(data);
+raw = raw(:,:,1:658);
+thresh = thresh(:,:,1:658);
+
+fill = fill3d(thresh);
+
+result = ones(925, 932, 658, 'like', fill);
+
 
 %% watershed
 
 fprintf("Segmentating ''%s''...\n", dset);
 
-result = segment(fill, 0.1, 10000);
+for i = 0 : 13
+    result(:,:, i*47+1 : (i+1)*47) = segment(fill(:,:, i*47+1 : (i+1)*47), 0.1, 10000);
+end
 
 cc = bwconncomp(result, 6);
 lm = labelmatrix(cc);
-lm = lm .* cast(data, "like", lm);
+lm = lm .* cast(thresh, "like", lm);
 
 save(sprintf("private\\results\\%s", dset), "lm");
 
@@ -39,4 +43,4 @@ path = sprintf("private\\extracted\\%s\\%s\\",dset,replace(datestr(datetime),':'
 
 fprintf("Extracting regions in ''%s'' to ''%s.''\n", dset, path);
 
-extractRegions(data, [], path, 27.7128); %sqrt(3 * (16^2)) = 27.7128
+extractRegions(raw, lm, path, 27.7128); %sqrt(3 * (16^2)) = 27.7128
