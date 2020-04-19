@@ -8,5 +8,5 @@ parameter "calls," which is used for formatting console output.
 
 function result = segment(data, ratio, minVolume)
 
-    result = segment_meta(data, ratio, minVolume, 0);
+    result = segmentMeta(data, ratio, minVolume, 0);
 end

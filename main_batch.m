@@ -20,7 +20,7 @@ thresh = thresh(:,:,1:658);
 
 fill = fill3d(thresh);
 
-result = ones(925, 932, 658, 'like', fill);
+result = zeros(925, 932, 658, 'like', fill);
 
 
 %% watershed
@@ -28,11 +28,10 @@ result = ones(925, 932, 658, 'like', fill);
 fprintf("Segmentating ''%s''...\n", dset);
 
 for i = 0 : 13
-    result(:,:, i*47+1 : (i+1)*47) = segment(fill(:,:, i*47+1 : (i+1)*47), 0.1, 10000);
+    result(:,:, i*47+1 : (i+1)*47) = segment(fill(:,:, i*47+1 : (i+1)*47), 0.075, 10000);
 end
 
-cc = bwconncomp(result, 6);
-lm = labelmatrix(cc);
+lm = labelmatrix(bwconncomp(result, 6));
 lm = lm .* cast(thresh, "like", lm);
 
 save(sprintf("private\\results\\%s", dset), "lm");
