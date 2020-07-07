@@ -2,8 +2,9 @@ function filled = fill3d(data)
     %filled Summary of this function goes here
     
     %permute so we're always filling xy plane
+    %implay(data);
 
-    %fill via yz plane
+    %fill via xy plane
     data = fill_xy(data);
     
     data = permute(data,[2,3,1]);

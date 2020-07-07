@@ -8,31 +8,31 @@ clear;
 
 %% load &/ make dataset
 
-dset = "batch";
+dset = "philippines";
+ratio = 0.2;
 
 load(sprintf("private\\data\\%s.mat", dset));
+clear raw;
 
+[x,y,z] = size(thresh);
+z = z-mod(z,2); %make z even
 
 %% modify dataset (morphological operations etc.)
 
-raw = raw(:,:,1:658);
-thresh = thresh(:,:,1:658);
+fill = fill3d(thresh(:,:,1:z));
 
-fill = fill3d(thresh);
-
-
-result = zeros(925, 932, 658, 'like', fill);
-
+result = zeros(x,y,z, 'like', fill);
 
 %% watershed
 
-fprintf("Segmentating ''%s''...\n", dset);
+fprintf("Segmenting ''%s''...\n", dset);
 
-for i = 0 : 13
-    z = i*47+1 : (i+1)*47;
-    result(:,:, z) = segment(fill(:,:, z), 0.075, 10000);
-end
+%segment both halves
+result(:,:,1:(z/2)) = segment(fill(:,:,1:(z/2)), ratio, 100);
+result(:,:,(z/2):end) = segment(fill(:,:,(z/2):end), ratio, 100);
 
+%segment where the halves meet
+%result(:,:,(z/2):(z/2)+1) = segment(result(:,:,(z/2):(z/2)+1), ratio, 100);
 
 lm = labelmatrix(bwconncomp(result, 6));
 

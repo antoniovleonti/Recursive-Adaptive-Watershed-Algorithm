@@ -25,7 +25,7 @@ fill = fill3d(data);
 
 fprintf("Segmentating ''%s''...\n", dset);
 
-result = segment(fill, 0.1, 10000);
+result = F_water_main(fill, 0.1, 10000);
 
 lm = labelmatrix(bwconncomp(result, 6));
 

@@ -3,15 +3,14 @@ Antonio Leonti
 4.1.2020
 This is a reimplmentation of the algo from the paper "Quantification of the
 morphology of shelly carbonate sands using 3D images" by D. KONG and J.
-FONSECA (http://dx.doi.org/10.1680/jgeot.16.P.278). This code is easier to
-read and faster than the original code. It's also recursive, which is cool.
+FONSECA (http://dx.doi.org/10.1680/jgeot.16.P.278).
 %}
 
 function result = segmentMeta(data, ratio, minVolume, calls)
     %% identify disjoint regions in data
 
     % get connected components
-    cc = bwconncomp(data);
+    cc = bwconncomp(data,26);
     % get volume for each connected component
     s = regionprops3(cc, "Volume", "BoundingBox");
     % create a label matrix of data from connected components
@@ -35,6 +34,7 @@ function result = segmentMeta(data, ratio, minVolume, calls)
             
             % now create distance map
             iedm = -bwdist(~crop);
+            
 
             %% modify local IEDM (if needed)
 
@@ -44,14 +44,15 @@ function result = segmentMeta(data, ratio, minVolume, calls)
             
             if numel(depths) >= 2
                 %% perform bring-up transformation & segmentation
+               
                 
-                % get index i of greatest difference depth_i - depth_i+1
+                % get index i of greatest difference depth_i - depth_i-1
                 [~, index] = max([depths(2:end), NaN] - depths);
                 % get d_i
                 H = depths(index);
                 
                 % fill all the basins by H (imhmin)
-                iedm = imhmin(iedm, H * ratio);
+                iedm = imhmin(iedm, H * ratio * numel(depths));
                 % clip extremely deep basins to –H(1 – ratio)
                 iedm(iedm < -H) = -H;
                 
@@ -63,9 +64,12 @@ function result = segmentMeta(data, ratio, minVolume, calls)
                 % determine if region was cut
                 if any(crop & (segmented == 0), 'all')
                     % resegment if it was
+                    
                     segmented = segmentMeta(segmented, ratio, minVolume, calls+1);
+
                 end
                 
+                % (convert bounding box to indices)
                 x = bb(2):sum(bb([2,5]));
                 y = bb(1):sum(bb([1,4]));
                 z = bb(3):sum(bb([3,6]));

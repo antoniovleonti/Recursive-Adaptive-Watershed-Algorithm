@@ -8,31 +8,26 @@ clear;
 
 %% load &/ make dataset
 
-dset = "batch";
+dset = "ledge";
 
 load(sprintf("private\\data\\%s.mat", dset));
 
-
 %% modify dataset (morphological operations etc.)
-
-raw = raw(:,:,1:658);
-thresh = thresh(:,:,1:658);
 
 fill = fill3d(thresh);
 
-
-result = zeros(925, 932, 658, 'like', fill);
-
+result = zeros(1004, 1024, 1018, 'like', fill);
 
 %% watershed
 
-fprintf("Segmentating ''%s''...\n", dset);
+fprintf("Segmenting ''%s''...\n", dset);
 
-for i = 0 : 13
-    z = i*47+1 : (i+1)*47;
-    result(:,:, z) = segment(fill(:,:, z), 0.075, 10000);
-end
+%result = segment(fill, 0.06, 100);
 
+result(:,:,1:460) = segment(fill(:,:,1:509), 0.06, 100);
+result(:,:,461:end) = segment(fill(:,:,510:end), 0.06, 100);
+
+result(:,:,230:690) = segment(result(:,:,509:510), 0.06, 100);
 
 lm = labelmatrix(bwconncomp(result, 6));
 
